@@ -1,0 +1,608 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		912369CD27D9023C00A384D1 /* XCUIElementQuery+labelContains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912369CC27D9023C00A384D1 /* XCUIElementQuery+labelContains.swift */; };
+		9125088D27BBCD060075C6D4 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125088C27BBCD060075C6D4 /* ActionButton.swift */; };
+		9125089527BBF41A0075C6D4 /* MunchkinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125089427BBF41A0075C6D4 /* MunchkinUITests.swift */; };
+		9125089727BBF41A0075C6D4 /* MunchkinUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125089627BBF41A0075C6D4 /* MunchkinUITestsLaunchTests.swift */; };
+		9125089F27BC3B920075C6D4 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125089E27BC3B920075C6D4 /* ViewModel.swift */; };
+		91881829276DD78500D33BA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91881828276DD78500D33BA6 /* AppDelegate.swift */; };
+		9188182D276DD78500D33BA6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9188182C276DD78500D33BA6 /* ViewController.swift */; };
+		91881832276DD78900D33BA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91881831276DD78900D33BA6 /* Assets.xcassets */; };
+		91881835276DD78900D33BA6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91881833276DD78900D33BA6 /* LaunchScreen.storyboard */; };
+		91B2C605279D9DF700289448 /* UIColor+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B2C604279D9DF700289448 /* UIColor+customColors.swift */; };
+		91FC124A279469CC00040686 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC1249279469CC00040686 /* PlayerCell.swift */; };
+		91FC124F27946A0A00040686 /* NewPlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC124E27946A0A00040686 /* NewPlayerCell.swift */; };
+		D3A73FD6928F43947D18FBBB /* Pods_Munchkin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFA4A2FD2FD76C0B914D522 /* Pods_Munchkin.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9125089827BBF41A0075C6D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9188181D276DD78500D33BA6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91881824276DD78500D33BA6;
+			remoteInfo = Munchkin;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8B23B96101C4EE69B65A44C5 /* Pods-Munchkin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Munchkin.debug.xcconfig"; path = "Target Support Files/Pods-Munchkin/Pods-Munchkin.debug.xcconfig"; sourceTree = "<group>"; };
+		912369CC27D9023C00A384D1 /* XCUIElementQuery+labelContains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+labelContains.swift"; sourceTree = "<group>"; };
+		9125088C27BBCD060075C6D4 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		9125089227BBF41A0075C6D4 /* MunchkinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MunchkinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9125089427BBF41A0075C6D4 /* MunchkinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchkinUITests.swift; sourceTree = "<group>"; };
+		9125089627BBF41A0075C6D4 /* MunchkinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchkinUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		9125089E27BC3B920075C6D4 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		91881825276DD78500D33BA6 /* Munchkin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Munchkin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91881828276DD78500D33BA6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9188182C276DD78500D33BA6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		91881831276DD78900D33BA6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		91881834276DD78900D33BA6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		91881836276DD78900D33BA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91B2C604279D9DF700289448 /* UIColor+customColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+customColors.swift"; sourceTree = "<group>"; };
+		91FC1249279469CC00040686 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
+		91FC124E27946A0A00040686 /* NewPlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerCell.swift; sourceTree = "<group>"; };
+		958AF4CE6B5F2DECA2432520 /* Pods-Munchkin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Munchkin.release.xcconfig"; path = "Target Support Files/Pods-Munchkin/Pods-Munchkin.release.xcconfig"; sourceTree = "<group>"; };
+		BBFA4A2FD2FD76C0B914D522 /* Pods_Munchkin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Munchkin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9125088F27BBF41A0075C6D4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91881822276DD78500D33BA6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3A73FD6928F43947D18FBBB /* Pods_Munchkin.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9125089327BBF41A0075C6D4 /* MunchkinUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9125089427BBF41A0075C6D4 /* MunchkinUITests.swift */,
+				9125089627BBF41A0075C6D4 /* MunchkinUITestsLaunchTests.swift */,
+				912369CC27D9023C00A384D1 /* XCUIElementQuery+labelContains.swift */,
+			);
+			path = MunchkinUITests;
+			sourceTree = "<group>";
+		};
+		9125089D27BC3B740075C6D4 /* GameScreen */ = {
+			isa = PBXGroup;
+			children = (
+				9188182C276DD78500D33BA6 /* ViewController.swift */,
+				9125089E27BC3B920075C6D4 /* ViewModel.swift */,
+			);
+			path = GameScreen;
+			sourceTree = "<group>";
+		};
+		9188181C276DD78500D33BA6 = {
+			isa = PBXGroup;
+			children = (
+				91881827276DD78500D33BA6 /* Munchkin */,
+				9125089327BBF41A0075C6D4 /* MunchkinUITests */,
+				91881826276DD78500D33BA6 /* Products */,
+				B9DB4642069A04FDAEB23FFD /* Pods */,
+				B7E28CE18B9D1A809843B4C3 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		91881826276DD78500D33BA6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				91881825276DD78500D33BA6 /* Munchkin.app */,
+				9125089227BBF41A0075C6D4 /* MunchkinUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		91881827276DD78500D33BA6 /* Munchkin */ = {
+			isa = PBXGroup;
+			children = (
+				91FC124D279469EF00040686 /* Presentation */,
+				91881828276DD78500D33BA6 /* AppDelegate.swift */,
+				91881831276DD78900D33BA6 /* Assets.xcassets */,
+				91881833276DD78900D33BA6 /* LaunchScreen.storyboard */,
+				91881836276DD78900D33BA6 /* Info.plist */,
+			);
+			path = Munchkin;
+			sourceTree = "<group>";
+		};
+		91B2C603279D9DDF00289448 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				91B2C604279D9DF700289448 /* UIColor+customColors.swift */,
+				9125088C27BBCD060075C6D4 /* ActionButton.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		91FC1248279469B900040686 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				91FC1249279469CC00040686 /* PlayerCell.swift */,
+				91FC124E27946A0A00040686 /* NewPlayerCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		91FC124D279469EF00040686 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				9125089D27BC3B740075C6D4 /* GameScreen */,
+				91B2C603279D9DDF00289448 /* Utils */,
+				91FC1248279469B900040686 /* Cells */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		B7E28CE18B9D1A809843B4C3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBFA4A2FD2FD76C0B914D522 /* Pods_Munchkin.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B9DB4642069A04FDAEB23FFD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8B23B96101C4EE69B65A44C5 /* Pods-Munchkin.debug.xcconfig */,
+				958AF4CE6B5F2DECA2432520 /* Pods-Munchkin.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9125089127BBF41A0075C6D4 /* MunchkinUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9125089A27BBF41A0075C6D4 /* Build configuration list for PBXNativeTarget "MunchkinUITests" */;
+			buildPhases = (
+				9125088E27BBF41A0075C6D4 /* Sources */,
+				9125088F27BBF41A0075C6D4 /* Frameworks */,
+				9125089027BBF41A0075C6D4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9125089927BBF41A0075C6D4 /* PBXTargetDependency */,
+			);
+			name = MunchkinUITests;
+			productName = MunchkinUITests;
+			productReference = 9125089227BBF41A0075C6D4 /* MunchkinUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		91881824276DD78500D33BA6 /* Munchkin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91881839276DD78900D33BA6 /* Build configuration list for PBXNativeTarget "Munchkin" */;
+			buildPhases = (
+				6A79A93D83ED27BADDBF04CB /* [CP] Check Pods Manifest.lock */,
+				91881821276DD78500D33BA6 /* Sources */,
+				91881822276DD78500D33BA6 /* Frameworks */,
+				91881823276DD78500D33BA6 /* Resources */,
+				FDA2DABDB4912F4F0186AAAB /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Munchkin;
+			productName = Munchkin;
+			productReference = 91881825276DD78500D33BA6 /* Munchkin.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9188181D276DD78500D33BA6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					9125089127BBF41A0075C6D4 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 91881824276DD78500D33BA6;
+					};
+					91881824276DD78500D33BA6 = {
+						CreatedOnToolsVersion = 13.1;
+					};
+				};
+			};
+			buildConfigurationList = 91881820276DD78500D33BA6 /* Build configuration list for PBXProject "Munchkin" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9188181C276DD78500D33BA6;
+			productRefGroup = 91881826276DD78500D33BA6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				91881824276DD78500D33BA6 /* Munchkin */,
+				9125089127BBF41A0075C6D4 /* MunchkinUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9125089027BBF41A0075C6D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91881823276DD78500D33BA6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91881835276DD78900D33BA6 /* LaunchScreen.storyboard in Resources */,
+				91881832276DD78900D33BA6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6A79A93D83ED27BADDBF04CB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Munchkin-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FDA2DABDB4912F4F0186AAAB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Munchkin/Pods-Munchkin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Munchkin/Pods-Munchkin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Munchkin/Pods-Munchkin-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9125088E27BBF41A0075C6D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				912369CD27D9023C00A384D1 /* XCUIElementQuery+labelContains.swift in Sources */,
+				9125089727BBF41A0075C6D4 /* MunchkinUITestsLaunchTests.swift in Sources */,
+				9125089527BBF41A0075C6D4 /* MunchkinUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91881821276DD78500D33BA6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91FC124F27946A0A00040686 /* NewPlayerCell.swift in Sources */,
+				91FC124A279469CC00040686 /* PlayerCell.swift in Sources */,
+				91B2C605279D9DF700289448 /* UIColor+customColors.swift in Sources */,
+				9188182D276DD78500D33BA6 /* ViewController.swift in Sources */,
+				91881829276DD78500D33BA6 /* AppDelegate.swift in Sources */,
+				9125088D27BBCD060075C6D4 /* ActionButton.swift in Sources */,
+				9125089F27BC3B920075C6D4 /* ViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9125089927BBF41A0075C6D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91881824276DD78500D33BA6 /* Munchkin */;
+			targetProxy = 9125089827BBF41A0075C6D4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		91881833276DD78900D33BA6 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91881834276DD78900D33BA6 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9125089B27BBF41A0075C6D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9486727C5W;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.MunchkinUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Munchkin;
+			};
+			name = Debug;
+		};
+		9125089C27BBF41A0075C6D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9486727C5W;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.MunchkinUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Munchkin;
+			};
+			name = Release;
+		};
+		91881837276DD78900D33BA6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		91881838276DD78900D33BA6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9188183A276DD78900D33BA6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B23B96101C4EE69B65A44C5 /* Pods-Munchkin.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9486727C5W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Munchkin/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9188183B276DD78900D33BA6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 958AF4CE6B5F2DECA2432520 /* Pods-Munchkin.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9486727C5W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Munchkin/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9125089A27BBF41A0075C6D4 /* Build configuration list for PBXNativeTarget "MunchkinUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9125089B27BBF41A0075C6D4 /* Debug */,
+				9125089C27BBF41A0075C6D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91881820276DD78500D33BA6 /* Build configuration list for PBXProject "Munchkin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91881837276DD78900D33BA6 /* Debug */,
+				91881838276DD78900D33BA6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91881839276DD78900D33BA6 /* Build configuration list for PBXNativeTarget "Munchkin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9188183A276DD78900D33BA6 /* Debug */,
+				9188183B276DD78900D33BA6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9188181D276DD78500D33BA6 /* Project object */;
+}
