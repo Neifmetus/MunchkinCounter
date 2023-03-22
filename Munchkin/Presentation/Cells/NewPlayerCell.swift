@@ -24,7 +24,7 @@ class NewPlayerCell: UICollectionViewCell {
         return view
     }()
     
-    let button: ActionButton = {
+    lazy var button: ActionButton = {
         let button = ActionButton()
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -54,8 +54,6 @@ class NewPlayerCell: UICollectionViewCell {
         backgroudView.snp.makeConstraints { make in
             make.top.leading.equalTo(16)
             make.trailing.bottom.equalTo(-16)
-            make.height.equalTo(150)
-            make.width.equalTo(150)
         }
     }
     

@@ -11,6 +11,7 @@ import SnapKit
 protocol PlayerCellDelegate: AnyObject {
     func levelUp(for id: Int)
     func levelDown(for id: Int)
+    func deletePlayer(with id: Int)
 }
 
 class PlayerCell: UICollectionViewCell {
@@ -18,19 +19,10 @@ class PlayerCell: UICollectionViewCell {
     var playerId: Int = 0
     weak var delegate: PlayerCellDelegate?
     
-    private let backgroudView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .mainBackgroundColor
-        view.layer.borderColor = UIColor.mainLineColor.cgColor
-        view.layer.borderWidth = 2
-        view.layer.cornerRadius = 25
-        view.accessibilityIdentifier = "test"
-        return view
-    }()
-    
     private let nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.textAlignment = .center
+        nameLabel.textColor = .mainLineColor
         nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         return nameLabel
     }()
@@ -53,11 +45,12 @@ class PlayerCell: UICollectionViewCell {
     private let levelCountLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
+        label.textColor = .mainLineColor
         label.font = UIFont.preferredFont(forTextStyle: .title1)
         return label
     }()
     
-    private let minusButton: ActionButton = {
+    private lazy var minusButton: ActionButton = {
         let button = ActionButton()
         button.setTitle("-", for: .normal)
         button.addTarget(self, action: #selector(decreaseLevel), for: .touchUpInside)
@@ -65,11 +58,36 @@ class PlayerCell: UICollectionViewCell {
         return button
     }()
     
-    private let plusButton: ActionButton = {
+    private lazy var plusButton: ActionButton = {
         let button = ActionButton()
         button.setTitle("+", for: .normal)
         button.addTarget(self, action: #selector(increaseLevel), for: .touchUpInside)
         button.accessibilityIdentifier = "plus_button"
+        return button
+    }()
+    
+    private let backgroudView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .mainBackgroundColor
+        view.layer.borderColor = UIColor.mainLineColor.cgColor
+        view.layer.borderWidth = 2
+        view.layer.cornerRadius = 25
+        view.accessibilityIdentifier = "test"
+        return view
+    }()
+    
+    private lazy var removeButton: UIButton = {
+        let button = UIButton()
+        let origImage = UIImage(systemName: "minus.circle")
+        let tintedImage = origImage?.withRenderingMode(.alwaysTemplate)
+        button.setImage(tintedImage, for: .normal)
+        button.tintColor = .red
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 20
+        button.clipsToBounds = true
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -89,7 +107,7 @@ class PlayerCell: UICollectionViewCell {
     }
     
     func setLevel(_ level: Int) {
-        levelCountLabel.text = "\(level)"
+        actualLevel = level
     }
     
     func setName(_ name: String) {
@@ -146,18 +164,32 @@ class PlayerCell: UICollectionViewCell {
         backgroudView.snp.makeConstraints { make in
             make.top.leading.equalTo(16)
             make.trailing.bottom.equalTo(-16)
-            make.height.equalTo(150)
-            make.width.equalTo(150)
+        }
+        
+        contentView.addSubview(removeButton)
+        removeButton.snp.makeConstraints { make in
+            make.centerX.equalTo(backgroudView.snp.trailing).inset(6)
+            make.centerY.equalTo(backgroudView.snp.top).inset(6)
+            make.size.equalTo(40)
         }
     }
     
     @objc
+    private func buttonTapped() {
+        delegate?.deletePlayer(with: playerId)
+    }
+    
+    @objc
     private func decreaseLevel() {
-        delegate?.levelDown(for: playerId)
+        if actualLevel > 0 {
+            actualLevel -= 1
+            delegate?.levelDown(for: playerId)
+        }
     }
     
     @objc
     private func increaseLevel() {
+        actualLevel += 1
         delegate?.levelUp(for: playerId)
     }
 }

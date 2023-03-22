@@ -16,13 +16,10 @@ struct Player {
 }
 
 protocol ViewModelDelegate: AnyObject {
-    func finishGame()
+    func finishGame(winner: Int)
 }
 
 class ViewModel: ViewModelDelegate {
-    func finishGame() {
-    }
-    
     var players: [Player] = []
     var maxId: Int {
         return players.map({ $0.id }).max() ?? 0
@@ -31,15 +28,28 @@ class ViewModel: ViewModelDelegate {
     weak var delegate: ViewModelDelegate?
     
     func levelUp(id: Int) {
-        players.forEach {
-            if $0.id == id {
-                if $0.level < 9 {
-                    //$0.level = $0.level + 1
-                } else if $0.level == 9 {
-                    //$0.level = $0.level + 1
-                    delegate?.finishGame()
+        for i in 0..<players.count {
+            let player = players[i]
+            if player.id == id {
+                if player.level == 9 {
+                    finishGame(winner: id)
+                } else {
+                    players[i].level += 1
                 }
             }
         }
+    }
+    
+    func levelDown(id: Int) {
+        for i in 0..<players.count {
+            let player = players[i]
+            if player.id == id {
+                players[i].level -= 1
+            }
+        }
+    }
+    
+    func finishGame(winner: Int) {
+        delegate?.finishGame(winner: winner)
     }
 }

@@ -18,8 +18,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.delegate = self
+        
+        let width = (UIScreen.main.bounds.width - 48) / 2
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        layout.itemSize = CGSize(width: width, height: width)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         layout.scrollDirection = UICollectionView.ScrollDirection.vertical
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         collectionView.setCollectionViewLayout(layout, animated: true)
         
         collectionView.delegate = self
@@ -40,10 +46,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("")
-    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -55,11 +58,10 @@ extension ViewController: UICollectionViewDataSource {
         if indexPath.item < viewModel.players.count,
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "player_cell",
                                                          for: indexPath) as? PlayerCell {
-            let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(removePlayer))
-            cell.addGestureRecognizer(longPressRecognizer)
-            let id = viewModel.players[indexPath.row].id
-            cell.playerId = id
-            cell.setName("Игрок \(id)")
+            let player = viewModel.players[indexPath.row]
+            cell.playerId = player.id
+            cell.setLevel(player.level)
+            cell.setName("Игрок \(player.id)")
             cell.delegate = self
             return cell
         } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "new_player_cell",
@@ -69,39 +71,45 @@ extension ViewController: UICollectionViewDataSource {
         }
         return UICollectionViewCell()
     }
-    
-    @objc
-    private func removePlayer(sender: UILongPressGestureRecognizer) {
-        if let playerCell = sender.view as? PlayerCell {
-            viewModel.players.removeAll(where: { $0.id == playerCell.playerId })
-            collectionView.reloadData()
-        }
-    }
 }
 
 extension ViewController: NewPlayerCellDelegate {
     func addPlayer() {
+        let id = viewModel.players.count
         viewModel.players.append(Player(id: viewModel.maxId + 1))
-        collectionView.reloadData()
+        collectionView.insertItems(at: [IndexPath(row: id, section: 0)])
     }
 }
 
 extension ViewController: PlayerCellDelegate {
+    func deletePlayer(with id: Int) {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? PlayerCell, cell.playerId == id {
+                collectionView.performBatchUpdates({ [collectionView, viewModel] in
+                    collectionView.deleteItems(at: [IndexPath(row: id, section: 0)])
+                    viewModel.players.removeAll(where: { $0.id == id })
+                }) { [collectionView] (finished) in
+                    collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
+                }
+            }
+        }
+    }
+    
     func levelUp(for id: Int) {
-        
+        viewModel.levelUp(id: id)
     }
     
     func levelDown(for id: Int) {
-    
+        viewModel.levelDown(id: id)
     }
-    
-    func finishGame() {
-        let alert = UIAlertController(title: "Перезагрузить игру",
+}
+
+extension ViewController: ViewModelDelegate {
+    func finishGame(winner: Int) {
+        let alert = UIAlertController(title: "Игра закончена.\nПобедил Игрок \(winner)\nПерезагрузить игру",
                                       message: nil,
                                       preferredStyle: .alert)
 
-        alert.addAction(UIAlertAction(title: "Cancel",
-                                      style: .default, handler: { _ in }))
         alert.addAction(UIAlertAction(title: "OK",
                                       style: .default,
                                       handler: { [weak self] _ in
@@ -110,6 +118,4 @@ extension ViewController: PlayerCellDelegate {
         }))
         self.present(alert, animated: true, completion: nil)
     }
-    
-    
 }
