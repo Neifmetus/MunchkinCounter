@@ -69,7 +69,7 @@ class PlayerCell: UICollectionViewCell {
     private let backgroudView: UIView = {
         let view = UIView()
         view.backgroundColor = .mainBackgroundColor
-        view.layer.borderColor = UIColor.mainLineColor.cgColor
+        view.layer.borderColor = UIColor.label.cgColor
         view.layer.borderWidth = 2
         view.layer.cornerRadius = 25
         view.accessibilityIdentifier = "test"

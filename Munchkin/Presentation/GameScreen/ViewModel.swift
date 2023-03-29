@@ -27,6 +27,10 @@ class ViewModel: ViewModelDelegate {
     
     weak var delegate: ViewModelDelegate?
     
+    func indexOf(id: Int) -> Int? {
+        players.firstIndex(where: { $0.id == id })
+    }
+    
     func levelUp(id: Int) {
         for i in 0..<players.count {
             let player = players[i]
