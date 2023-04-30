@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         button.layer.borderWidth = 2
         button.layer.cornerRadius = 10
         button.setTitleColor(.mainLineColor, for: .normal)
-        button.setTitle("Restart game", for: .normal)
+        button.setTitle("\(NSLocalizedString("restartGame", comment: ""))", for: .normal)
         button.addTarget(self, action: #selector(reloadGame), for: .touchUpInside)
         return button
     }()
@@ -82,7 +82,7 @@ extension ViewController: UICollectionViewDataSource {
             let player = viewModel.players[indexPath.row]
             cell.playerId = player.id
             cell.setLevel(player.level)
-            cell.setName("Игрок \(player.id)")
+            cell.setName("\(NSLocalizedString("player", comment: "")) \(player.id)")
             cell.delegate = self
             return cell
         } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "new_player_cell",
@@ -129,7 +129,8 @@ extension ViewController: PlayerCellDelegate {
 
 extension ViewController: ViewModelDelegate {
     func finishGame(winner: Int) {
-        let alert = UIAlertController(title: "Игра закончена.\nПобедил Игрок \(winner)\nПерезагрузить игру",
+        let title = String(format: NSLocalizedString(NSLocalizedString("winMessage", comment: ""), comment: ""), "\(winner)")
+        let alert = UIAlertController(title: title,
                                       message: nil,
                                       preferredStyle: .alert)
 

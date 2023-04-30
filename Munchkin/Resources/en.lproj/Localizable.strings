@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Munchkin
+
+  Created by Екатерина Батеева on 30.04.2023.
+  
+*/
+
+"player" = "Player";
+"restartGame" = "Restart game";
+"winMessage" = "Game over.\nWinner is Player %@\nRestart game";

@@ -17,6 +17,7 @@
 		91881832276DD78900D33BA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91881831276DD78900D33BA6 /* Assets.xcassets */; };
 		91881835276DD78900D33BA6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91881833276DD78900D33BA6 /* LaunchScreen.storyboard */; };
 		91B2C605279D9DF700289448 /* UIColor+customColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B2C604279D9DF700289448 /* UIColor+customColors.swift */; };
+		91F55FDF29FEA30400D7D505 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 91F55FE129FEA30400D7D505 /* Localizable.strings */; };
 		91FC124A279469CC00040686 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC1249279469CC00040686 /* PlayerCell.swift */; };
 		91FC124F27946A0A00040686 /* NewPlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC124E27946A0A00040686 /* NewPlayerCell.swift */; };
 		D3A73FD6928F43947D18FBBB /* Pods_Munchkin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFA4A2FD2FD76C0B914D522 /* Pods_Munchkin.framework */; };
@@ -47,6 +48,8 @@
 		91881834276DD78900D33BA6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91881836276DD78900D33BA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91B2C604279D9DF700289448 /* UIColor+customColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+customColors.swift"; sourceTree = "<group>"; };
+		91F55FE029FEA30400D7D505 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		91F55FE229FEA31600D7D505 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		91FC1249279469CC00040686 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		91FC124E27946A0A00040686 /* NewPlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerCell.swift; sourceTree = "<group>"; };
 		958AF4CE6B5F2DECA2432520 /* Pods-Munchkin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Munchkin.release.xcconfig"; path = "Target Support Files/Pods-Munchkin/Pods-Munchkin.release.xcconfig"; sourceTree = "<group>"; };
@@ -115,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				91FC124D279469EF00040686 /* Presentation */,
+				91F55FDC29FEA2D200D7D505 /* Resources */,
 				91881828276DD78500D33BA6 /* AppDelegate.swift */,
 				91881831276DD78900D33BA6 /* Assets.xcassets */,
 				91881833276DD78900D33BA6 /* LaunchScreen.storyboard */,
@@ -130,6 +134,14 @@
 				9125088C27BBCD060075C6D4 /* ActionButton.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		91F55FDC29FEA2D200D7D505 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				91F55FE129FEA30400D7D505 /* Localizable.strings */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		91FC1248279469B900040686 /* Cells */ = {
@@ -234,6 +246,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 9188181C276DD78500D33BA6;
 			productRefGroup = 91881826276DD78500D33BA6 /* Products */;
@@ -259,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91881835276DD78900D33BA6 /* LaunchScreen.storyboard in Resources */,
+				91F55FDF29FEA30400D7D505 /* Localizable.strings in Resources */,
 				91881832276DD78900D33BA6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,6 +365,15 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		91F55FE129FEA30400D7D505 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91F55FE029FEA30400D7D505 /* en */,
+				91F55FE229FEA31600D7D505 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -402,6 +425,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -463,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -522,7 +547,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 9486727C5W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Munchkin/Info.plist;
@@ -533,7 +558,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -553,7 +578,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 9486727C5W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Munchkin/Info.plist;
@@ -564,7 +589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
