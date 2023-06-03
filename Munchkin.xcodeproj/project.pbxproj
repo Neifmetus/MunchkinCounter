@@ -371,7 +371,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Munchkin/Pods-Munchkin-frameworks.sh\"\n";
+			shellScript = "
+";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
