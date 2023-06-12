@@ -5,6 +5,8 @@
 //  Created by Neifmetus on 15.02.2022.
 //
 
+import Foundation
+
 struct Player {
     var name = ""
     var level = 0
@@ -12,14 +14,16 @@ struct Player {
     
     init(id: Int) {
         self.id = id
+        self.name = "\(NSLocalizedString("player", comment: "")) \(id)"
     }
 }
 
 protocol ViewModelDelegate: AnyObject {
     func finishGame(winner: Int)
+    func updateCell(with index: Int)
 }
 
-class ViewModel: ViewModelDelegate {
+class ViewModel {
     var players: [Player] = []
     var maxId: Int {
         return players.map({ $0.id }).max() ?? 0
@@ -50,6 +54,13 @@ class ViewModel: ViewModelDelegate {
             if player.id == id {
                 players[i].level -= 1
             }
+        }
+    }
+    
+    func updatePlayer(with playerId: Int, name: String) {
+        if let index = players.firstIndex(where: { $0.id == playerId }) {
+            players[index].name = name
+            delegate?.updateCell(with: index)
         }
     }
     

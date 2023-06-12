@@ -8,4 +8,7 @@
 
 "player" = "Player";
 "restartGame" = "Restart game";
-"winMessage" = "Game over.\nWinner is Player %@\nRestart game";
+"winMessage" = "Game over.\nWinner is %@\nRestart game";
+"changeName" = "Change name";
+"cancel" = "Cancel";
+"enterName" = "Enter player's name";
