@@ -9,7 +9,7 @@ import Foundation
 
 struct Player {
     var name = ""
-    var level = 0
+    var level = 1
     let id: Int
     
     init(id: Int) {

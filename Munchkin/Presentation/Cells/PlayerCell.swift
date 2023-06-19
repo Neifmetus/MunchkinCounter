@@ -45,7 +45,7 @@ class PlayerCell: UICollectionViewCell {
     
     private let levelCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "0"
+        label.text = "1"
         label.textColor = .mainLineColor
         label.font = UIFont.preferredFont(forTextStyle: .title1)
         return label
@@ -92,7 +92,7 @@ class PlayerCell: UICollectionViewCell {
         return button
     }()
     
-    private var actualLevel: Int = 0 {
+    private var actualLevel: Int = 1 {
         didSet {
             levelCountLabel.text = "\(actualLevel)"
         }
@@ -190,7 +190,7 @@ class PlayerCell: UICollectionViewCell {
     
     @objc
     private func decreaseLevel() {
-        if actualLevel > 0 {
+        if actualLevel > 1 {
             actualLevel -= 1
             delegate?.levelDown(for: playerId)
         }
