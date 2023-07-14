@@ -47,6 +47,7 @@ class PlayerCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "1"
         label.textColor = .mainLineColor
+        label.accessibilityIdentifier = "level"
         label.font = UIFont.preferredFont(forTextStyle: .title1)
         return label
     }()
