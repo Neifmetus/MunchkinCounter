@@ -12,6 +12,7 @@ protocol PlayerCellDelegate: AnyObject {
     func levelUp(for id: Int)
     func levelDown(for id: Int)
     func deletePlayer(with id: Int)
+    func changeName(playerId: Int, oldName: String)
 }
 
 class PlayerCell: UICollectionViewCell {
@@ -44,7 +45,7 @@ class PlayerCell: UICollectionViewCell {
     
     private let levelCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "0"
+        label.text = "1"
         label.textColor = .mainLineColor
         label.font = UIFont.preferredFont(forTextStyle: .title1)
         return label
@@ -66,8 +67,8 @@ class PlayerCell: UICollectionViewCell {
         return button
     }()
     
-    private let backgroudView: UIView = {
-        let view = UIView()
+    private let backgroudView: UIButton = {
+        let view = UIButton()
         view.backgroundColor = .mainBackgroundColor
         view.layer.borderColor = UIColor.label.cgColor
         view.layer.borderWidth = 2
@@ -91,7 +92,7 @@ class PlayerCell: UICollectionViewCell {
         return button
     }()
     
-    private var actualLevel: Int = 0 {
+    private var actualLevel: Int = 1 {
         didSet {
             levelCountLabel.text = "\(actualLevel)"
         }
@@ -100,6 +101,14 @@ class PlayerCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         layoutViews()
+        let contextMenu = UIMenu(title: "", children: [
+            UIAction(title: NSLocalizedString("changeName", comment: ""), handler: { [weak self] action in
+                guard let self = self, let name = self.nameLabel.text else { return }
+                self.delegate?.changeName(playerId: self.playerId, oldName: name)
+            }),
+        ])
+
+        backgroudView.menu = contextMenu
     }
     
     required init?(coder: NSCoder) {
@@ -181,7 +190,7 @@ class PlayerCell: UICollectionViewCell {
     
     @objc
     private func decreaseLevel() {
-        if actualLevel > 0 {
+        if actualLevel > 1 {
             actualLevel -= 1
             delegate?.levelDown(for: playerId)
         }

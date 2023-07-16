@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ViewController: UIViewController {
     private let viewModel = ViewModel()
@@ -47,12 +48,9 @@ class ViewController: UIViewController {
                 
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         let margins = view.layoutMarginsGuide
         view.addSubview(refreshButton)
@@ -82,7 +80,7 @@ extension ViewController: UICollectionViewDataSource {
             let player = viewModel.players[indexPath.row]
             cell.playerId = player.id
             cell.setLevel(player.level)
-            cell.setName("\(NSLocalizedString("player", comment: "")) \(player.id)")
+            cell.setName(player.name)
             cell.delegate = self
             return cell
         } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "new_player_cell",
@@ -103,6 +101,26 @@ extension ViewController: NewPlayerCellDelegate {
 }
 
 extension ViewController: PlayerCellDelegate {
+    func changeName(playerId: Int, oldName: String) {
+        let alert = UIAlertController(title: NSLocalizedString("changeName", comment: ""),
+                                      message:  NSLocalizedString("enterName", comment: ""),
+                                      preferredStyle: .alert)
+
+        alert.addTextField { (textField) in
+            textField.text = ""
+        }
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert, weak self] (_) in
+            if let text = alert?.textFields?.first?.text, !text.isEmpty {
+                self?.viewModel.updatePlayer(with: playerId, name: text)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: { _ in }))
+
+        self.present(alert, animated: true)
+    }
+    
     func deletePlayer(with id: Int) {
         for cell in collectionView.visibleCells {
             if let cell = cell as? PlayerCell,
@@ -128,8 +146,13 @@ extension ViewController: PlayerCellDelegate {
 }
 
 extension ViewController: ViewModelDelegate {
+    func updateCell(with index: Int) {
+        collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+    }
+    
     func finishGame(winner: Int) {
-        let title = String(format: NSLocalizedString(NSLocalizedString("winMessage", comment: ""), comment: ""), "\(winner)")
+        let name = viewModel.players.first(where: { $0.id == winner })?.name ?? ""
+        let title = String(format: NSLocalizedString(NSLocalizedString("winMessage", comment: ""), comment: ""), "\(name)")
         let alert = UIAlertController(title: title,
                                       message: nil,
                                       preferredStyle: .alert)
