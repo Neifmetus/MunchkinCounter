@@ -1,0 +1,7 @@
+"player" = "Joueur";
+"restartGame" = "Redémarrer le jeu";
+"winMessage" = "Le jeu est terminé.\nLe gagnant est %@\nRecommencer le jeu";
+"changeName" = "Changer le nom";
+"cancel" = "Annuler";
+"enterName" = "Entrez le nom du joueur";
+"roll" = "Lancer dés";

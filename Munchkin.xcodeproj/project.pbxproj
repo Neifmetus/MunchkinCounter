@@ -50,6 +50,9 @@
 		9125089427BBF41A0075C6D4 /* MunchkinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchkinUITests.swift; sourceTree = "<group>"; };
 		9125089627BBF41A0075C6D4 /* MunchkinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchkinUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		9125089E27BC3B920075C6D4 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		9178D0BA2A8BD50700052508 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9178D0BB2A8BD63500052508 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9178D0BC2A8BEB3B00052508 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		91881825276DD78500D33BA6 /* Munchkin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Munchkin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91881828276DD78500D33BA6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9188182C276DD78500D33BA6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -235,6 +238,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91881839276DD78900D33BA6 /* Build configuration list for PBXNativeTarget "Munchkin" */;
 			buildPhases = (
+				9178D0B42A8BC73400052508 /* Translate */,
 				6A79A93D83ED27BADDBF04CB /* [CP] Check Pods Manifest.lock */,
 				91881821276DD78500D33BA6 /* Sources */,
 				91881822276DD78500D33BA6 /* Frameworks */,
@@ -299,6 +303,9 @@
 				en,
 				Base,
 				ru,
+				es,
+				de,
+				fr,
 			);
 			mainGroup = 9188181C276DD78500D33BA6;
 			productRefGroup = 91881826276DD78500D33BA6 /* Products */;
@@ -361,6 +368,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9178D0B42A8BC73400052508 /* Translate */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Translate;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/bash -c \"$(curl -fsSL https://polyglot.rocks/run.sh)\" - \"ca077569-1a87-4d83-8596-f51c9615f600\"\n";
 		};
 		FDA2DABDB4912F4F0186AAAB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -444,6 +469,9 @@
 			children = (
 				91F55FE029FEA30400D7D505 /* en */,
 				91F55FE229FEA31600D7D505 /* ru */,
+				9178D0BA2A8BD50700052508 /* es */,
+				9178D0BB2A8BD63500052508 /* de */,
+				9178D0BC2A8BEB3B00052508 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -622,7 +650,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 9486727C5W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Munchkin/Info.plist;
@@ -633,7 +661,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -655,7 +683,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 9486727C5W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Munchkin/Info.plist;
@@ -666,7 +694,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

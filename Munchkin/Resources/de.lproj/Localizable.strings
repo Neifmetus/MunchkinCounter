@@ -1,0 +1,7 @@
+"player" = "Spieler";
+"restartGame" = "Spiel neu starten";
+"winMessage" = "Spiel vorbei.\nGewinner ist %@\nSpiel neu starten";
+"changeName" = "Namen ändern";
+"cancel" = "Abbrechen";
+"enterName" = "Geben Sie den Namen des Spielers ein";
+"roll" = "Würfeln";

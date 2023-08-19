@@ -1,11 +1,3 @@
-/* 
-  Localizable.strings
-  Munchkin
-
-  Created by Екатерина Батеева on 30.04.2023.
-  
-*/
-
 "player" = "Игрок";
 "restartGame" = "Перезагрузить игру";
 "winMessage" = "Игра закончена.\nПобедил %@\nПерезагрузить игру";

@@ -1,0 +1,781 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME="./polyglot"
+SCRIPT_NAME=${0:-$SCRIPT_NAME}
+
+print_help() {
+  echo ""
+  echo "Usage: $SCRIPT_NAME <token> [OPTIONS]"
+  echo ""
+  echo "Options:"
+  echo "  -p, --path-to-files <PATH>         Path to the directory to search files to be localized (optional)"
+  echo "  -f, --files-to-translate <FILES>   Comma-separated list of file names to translate (optional)"
+  echo "  -d, --descr-requirement <OPTION>   How the description will be taken into account for strings (optional)."
+  echo "                                     To remove the warning when running the script, pass this parameter with one of the values:"
+  echo "                                     'optional' - description will be optional for all strings,"
+  echo "                                     'only-new' - required only for strings without manual translations,"
+  echo "                                     'required' - required for all strings"
+  echo "  -h, --help                         Show this help message"
+  echo ""
+  echo "Examples:"
+  echo ""
+  echo "  1) Execution with a custom path to the working directory:"
+  echo "     $SCRIPT_NAME <token> -p /path/to/sources"
+  echo ""
+  echo "  2) Execution with the name of the file to be translated:"
+  echo "     $SCRIPT_NAME <token> -t InfoPlist.strings"
+  echo ""
+  echo "  3) Execution with the list of file names to be translated:"
+  echo "     $SCRIPT_NAME <token> -t \"Localizable.strings,InfoPlist.strings\""
+  echo ""
+  echo "  4) Execution with both the path to the working directory and the file name for translation:"
+  echo "     $SCRIPT_NAME <token> -p /path/to/sources -t \"Localizable.strings,InfoPlist.strings\""
+  exit 0
+}
+
+# Setup parameters
+
+api_url='https://api.polyglot.rocks'
+api_url=${API_URL:-$api_url}
+
+support_url='https://github.com/clickcaramel/PolyglotRocks#support'
+support_email='support@polyglot.rocks'
+exit_code_mark='POLYGLOT_EXIT_CODE'
+
+translation_error_code=50
+translation_error_mark="$exit_code_mark: $translation_error_code"
+
+free_plan_exhausted_code=42
+free_plan_exhausted_mark="$exit_code_mark: $free_plan_exhausted_code"
+
+product_id=$PRODUCT_BUNDLE_IDENTIFIER
+base_language='en'
+comment_regex='^\s*//.*'
+dev_comment_regex='^\s*///.*'
+comment_mark_regex='^\s*//\s*(MARK|FIXME|TODO)\s*:.*'
+digit_regex='^[0-9]+$'
+line_regex='^[[:space:]]*"([^"]+)"[[:space:]]*=[[:space:]]*".*";[[:space:]]*$'
+escaped_quote='\\"'
+quote_placeholder='\*\^\*'
+descr_requirement=''
+descr_requirement_options=('optional' 'only-new' 'required')
+translation_retries_number=${TRANSLATION_RETRIES_NUMBER:-5}
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -p|--path-to-files)
+            project_path="$2"
+            shift
+            shift
+            ;;
+        -f|--files-to-translate)
+            files_to_translate="$2"
+            shift
+            shift
+            ;;
+        -d|--descr-requirement)
+            descr_requirement=`echo "$2" | xargs`
+            shift
+            shift
+            ;;
+        -h|--help)
+            print_help
+            exit 0
+            ;;
+        --clear-cache)
+            clear_cache=true
+            shift
+            ;;
+        -*|--*)
+            echo "Error: invalid option $1"
+            print_help
+            exit 1
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # Restore positional arguments
+
+is_mac_os=false
+
+if [[ $(uname -s) == "Darwin" ]]; then
+    is_mac_os=true
+elif [[ $(uname -s) == "Linux" ]]; then
+    is_mac_os=false
+else
+    echo "Operating system is not supported"
+    exit 1
+fi
+
+if [ -n "$XCODE_VERSION_ACTUAL" ]; then
+    info() {
+        echo "[`date`] $@"
+    }
+
+    warning() {
+        echo "warning: [`date`] $@"
+    }
+
+    error() {
+        echo "error: [`date`] $@"
+    }
+else
+    info() {
+        echo "`date`: [INFO] $@"
+    }
+
+    warning() {
+        echo "`date`: [WARN] $@"
+    }
+
+    error() {
+        echo "`date`: [ERROR] $@"
+    }
+fi
+
+
+if [ "$clear_cache" != true ] && [[ $# -lt 1 ]]; then
+    error 'Tenant token is required as a first argument'
+    exit 1
+fi
+
+tenant_token="$1"
+
+if [ -z "$descr_requirement" ]; then
+    warning "Description requirement is not specified! If you want the best quality translation, we recommend to use a description for most strings. Please pass the -d argument with a value to make a description required or optional. Run Polyglot with '--help' for details"
+    descr_requirement='optional'
+elif [ -z "`echo \"${descr_requirement_options[@]}\" | grep $descr_requirement`" ]; then
+    error 'Invalid description requirement'
+    print_help
+    exit 1
+fi
+
+# Configure environment.
+# Declare dictionary if bash supports it
+
+declare -A translations &>/dev/null;
+declare -A translators_comments &>/dev/null;
+declare -A descriptions &>/dev/null;
+declare -A desired_max_lengths &>/dev/null;
+if [ $? -eq 0 ]; then
+    set_translation() {
+        translations[`echo $1_$2_$3`]="$4"
+
+        if [ -n "$5" ] && [ "$5" != "null" ]; then
+            translators_comments[`echo $2_$3`]="$5"
+        fi
+    }
+
+    set_description() {
+        descriptions["$1"]="$2"
+    }
+
+    set_desired_max_len() {
+        desired_max_lengths["$1"]="$2"
+    }
+
+    get_translation() {
+        echo ${translations[`echo $1_$2_$3`]}
+    }
+
+    get_translator_comment() {
+        echo ${translators_comments[`echo $1_$2`]}
+    }
+
+    get_description() {
+        echo ${descriptions["$1"]}
+    }
+
+    get_desired_max_len() {
+        echo ${desired_max_lengths["$1"]}
+    }
+else
+    warning "Your Bash version does not support associative arrays, indexing will be slow, we recommend updating your Bash to the newer version."
+    translation_key() {
+        echo `calc_md5 "$1|~|$2"`
+    }
+
+    set_translation() {
+        md5key="`translation_key \"$2\" \"$3\"`"
+        printf -v "$1_translations__${md5key}" %s "$4"
+
+        if [ -n "$5" ] && [ "$5" != "null" ]; then
+            printf -v "translators_comments__${md5key}" %s "$5"
+        fi
+    }
+
+    set_description() {
+        md5key="`calc_md5 \"$1\"`"
+        printf -v "descriptions__${md5key}" %s "$2"
+    }
+
+    set_desired_max_len() {
+        md5key="`calc_md5 \"$1\"`"
+        printf -v "desired_max_lengths__${md5key}" %s "$2"
+    }
+
+    get_translation() {
+        n="$1_translations__`translation_key \"$2\" \"$3\"`"
+        echo ${!n}
+    }
+
+    get_translator_comment() {
+        n="translators_comments__`translation_key \"$1\" \"$2\"`"
+        echo ${!n}
+    }
+
+    get_description() {
+        n="descriptions__`calc_md5 \"$1\"`"
+        echo ${!n}
+    }
+
+    get_desired_max_len() {
+        n="desired_max_lengths__`calc_md5 \"$1\"`"
+        echo ${!n}
+    }
+fi
+
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export PATH=$BASEDIR/lib:$PATH
+
+if [ $is_mac_os = true ]; then
+    jq() {
+        jq-osx-amd64 "$@"
+    }
+    export -f jq
+else
+    jq() {
+        jq-linux64 "$@"
+    }
+    export -f jq
+fi
+
+backup_root="/tmp"
+if [ -n "$GITHUB_HEAD_REF" ]; then
+    backup_root="./tmp"
+fi
+
+if [ -n "$product_id" ]; then
+    branch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
+
+    if [ -z "$branch" ]; then
+        if [ -n "$GITHUB_HEAD_REF" ]; then
+            branch="$GITHUB_HEAD_REF"
+        else
+            branch="$RANDOM"
+        fi
+    fi
+
+    branch=`echo "$branch" | tr -d '/()'`
+    backup_path="$backup_root/$product_id/$branch"
+    backup_file='.last_used_manual_translations'
+    backup_langs_file="$backup_path/.languages"
+    prev_translations_file="$backup_path/$backup_file"
+    mkdir -p "$backup_path"
+fi
+
+escape_for_sed() {
+    echo "$1" | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g'
+}
+
+restart_translation_info() {
+    echo `info "Seems like $1 is changed for '$2' so we're starting translations from scratch for this string."`
+}
+
+escape_for_grep() {
+    sed 's/[][\.|$(){}?+*^]/&/g' <<< "$*"
+}
+
+escape_line_breaks() {
+    echo "$1" | sed -e 's/\\n/\\\\n/g'
+}
+
+response_to_js_map() {
+    fixed_response=`echo "$1" | sed -e "s/$escaped_quote/$quote_placeholder/g"`
+    echo "$fixed_response" | jq -r 'map( { (.stringId|tostring): (.translations + {description: .description, desiredMaxLength: .desiredMaxLength}) } ) | add | del(.[].stringId)'
+}
+
+calc_md5() {
+    if [ $is_mac_os = true ]; then
+        echo "$1" | md5
+    else
+        echo "$1" | md5sum | cut -d ' ' -f 1
+    fi
+}
+
+find_duplicates() {
+    echo `echo "$1" | sort | sed -e 's/"\(.*\)" *= *.*;/\1/' | uniq -c | grep -v "^\s*$\|^.*\/\/" | grep -v '^ *1 '`
+}
+
+fill_translations_map() {
+    data=''
+
+    if [ -z "$3" ]; then
+        data=`echo "$2" | jq -rc 'to_entries | .[]'`
+    else
+        data=`jq -rcn --argfile prev "$2" --argfile new "$3" '$new|with_entries(select($prev[.key] != .value))|to_entries|.[]'`
+    fi
+
+    while read item ; do
+        id="`echo $item | jq -r '.key'`"
+
+        if [ "$1" = 'manual' ]; then
+            description="`echo $item | jq -r '.value.description? // empty'`"
+            max_len="`echo $item | jq -r '.value.desiredMaxLength? // empty'`"
+            set_description "$id" "$description"
+            set_desired_max_len "$id" $max_len
+        fi
+
+        while IFS="~" read -r key value comment
+        do
+            set_translation "$1" "$id" "$key" "$value" "$comment"
+        done < <(escape_line_breaks "$item" | jq -rc '.value|del(.description, .desiredMaxLength)|to_entries|map("\(.key)~\(.value.value)~\(.value.translatorComment?)") | .[]' | sed -e "s/$quote_placeholder/$escaped_quote/g")
+
+    done < <(escape_line_breaks "$data")
+}
+
+translate_string() {
+    id="$1"
+    value=`echo "$2" | sed -e 's/"/\\\"/g'`
+    descr=`echo "$3" | sed -e 's/"/\\\"/g'`
+    encoded_id=`echo "$id" | sed -e "s/\%/\%25"/g`
+    encoded_id=`echo "$encoded_id" | jq -Rr @uri`
+    max_len=null
+
+    if [ -n "$4" ]; then
+        max_len=$4
+    fi
+
+    response=$(curl -X PUT -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $tenant_token" -L "$api_url/products/$product_id/strings/$encoded_id" -d "{ \"translations\": { \"en\": \"$value\" }, \"description\": \"$descr\", \"desiredMaxLength\": $max_len }" -s)
+
+    if [ "`echo \"$response\" | grep 'stringId'`" ]; then
+        echo "$response"
+    elif [ "`echo \"$response\" | grep 'paymentLinks'`" ]; then
+        premium_url=`echo "$response" | jq '.paymentLinks.premium' | sed -e 's/^"//' -e 's/"$//'`
+        unlimited_ai_url=`echo "$response" | jq '.paymentLinks.unlimitedAi' | sed -e 's/^"//' -e 's/"$//'`
+        echo "You've reached limits of your free plan. Subscribe to remove the limits"
+        echo "Premium plan with translations by humans: [$premium_url]"
+        echo "Unlimited AI plan: [$unlimited_ai_url]"
+        echo "$free_plan_exhausted_mark"
+    else
+        echo "Something went wrong. Please try to restart Polyglot or contact our support team at $support_email. Please, provide the following information:"
+        echo "Parameters: key=$id; encoded_id=$encoded_id; value=$value; descr=$descr"
+        echo "Server Response: ${response}"
+        echo "$translation_error_mark"
+    fi
+}
+
+update_languages() {
+    echo "$1" > "$backup_langs_file"
+    langs_json=`echo "$1" | sed -e 's/.*/"&",/' -e '$s/,//'`
+    curl -X PUT -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $tenant_token" -L "$api_url/products/$product_id" -d "{ \"languages\": [$langs_json] }" -s
+}
+
+get_strings_from_file() {
+    echo "`grep '=' \"$1\" | grep -v \"$comment_regex\"`"
+}
+
+if [ "$clear_cache" == true ]; then
+    if [ -z $product_id ] ; then
+        echo 'Product id is not specified. Use $PRODUCT_BUNDLE_IDENTIFIER for this'
+        exit 1
+    fi
+
+    echo "{}" > "$prev_translations_file"
+    echo "" > "$backup_langs_file"
+    echo 'Cache is successfully cleared'
+    exit 0
+fi
+
+if [ -z $project_path ] ; then
+    project_path="${PROJECT_DIR:-./}"
+fi
+
+if [ -z $product_id ] ; then
+    echo 'Product id is not specified. Use $PRODUCT_BUNDLE_IDENTIFIER for this'
+    exit 1
+fi
+
+if [ -z "$files_to_translate" ] ; then
+    files_to_translate=$(find "$project_path" -name '*.strings' -type f 2>/dev/null | xargs basename -a | sort | uniq | paste -sd ',' -)
+    files_to_translate=${files_to_translate:-"Localizable.strings"}
+fi
+
+OLDIFS=$IFS
+IFS=','
+read -ra files_to_translate <<< "$files_to_translate"
+IFS=$OLDIFS
+
+for file in "${files_to_translate[@]}"
+do
+  if [[ "${file##*.}" != "strings" ]]; then
+    error "'$file' is not a .strings file"
+    exit 1
+  fi
+done
+
+new_translations_file="$backup_root/translations.$RANDOM.json"
+echo '{}' > $new_translations_file
+
+langs_path=`find $project_path \( -name Pods -o -name Carthage \) -prune -o -type d -name *.lproj -print | head -1 | sed -e 's/\/[a-zA-Z\-]*\.lproj//'`
+are_localisation_files_empty=false
+
+if [ -z $langs_path ]; then
+    warning "Localization files were not found. To add them, follow the documentation: [$support_url]"
+    exit 0
+fi
+
+if [ -z "`grep -l '=' $langs_path/*.lproj/*.strings | grep -v '/en.lproj/'`" ]; then
+    echo "{}" > "$prev_translations_file"
+    are_localisation_files_empty=true
+fi
+
+escaped_langs_path="`escape_for_sed $langs_path`"
+all_languages=`ls -d $langs_path/*.lproj | grep -v 'Base\.lproj' | sed -e "s/$escaped_langs_path\///" -e 's/\.lproj//' | sort`
+
+if [ "$all_languages" = "en" ]; then
+    warning "Only the English localization was found. To add other languages, follow the documentation: [$support_url]"
+    exit 0
+else
+    info "Found languages: $(echo "$all_languages" | xargs)"
+fi
+
+main() {
+    file_to_translate=$1
+
+    # checking for duplicates
+    base_file=`find "$project_path" \( -name "Pods" -o -name "Carthage" \) -prune -o -type f -print | grep "$file_to_translate" | grep en.lproj | head -1`
+
+    if [ ! -f "$base_file" ]; then
+        return 0
+    fi
+
+    base_file_content=`get_strings_from_file $base_file | grep -v 'polyglot:disable:this'`
+    base_file_full_content=`grep -e '=' -e "$comment_regex" $base_file | grep -ve 'polyglot:disable:this' -Eve "$comment_mark_regex" -ve "$dev_comment_regex"`
+
+    if [ -z "$base_file_full_content" ]; then
+        warning "The English localization file ($file_to_translate) is empty, there is nothing to translate. Add lines to translate there. Documentation: [$support_url]"
+        return 0
+    fi
+
+    disabled_base_file_str_ids=`grep -e '=' $base_file | grep 'polyglot:disable:this' | cut -d '=' -f 1`
+    duplicates=`find_duplicates "$base_file_content"`
+
+    if [ -n "$duplicates" ] ; then
+        error "Found duplicates in $base_file"
+        echo $duplicates
+        exit 43
+    fi
+
+    [ -f "$prev_translations_file" ] || echo "{}" > "$prev_translations_file"
+
+    info "Downloading translations from the server"
+    manual_translations_response=$(curl -H "Accept: application/json" -H "Authorization: Bearer $tenant_token" -L "$api_url/products/$product_id/strings?manual=true" -s)
+    auto_translations_response=''
+
+    case `echo $manual_translations_response | jq -r '.message?'` in
+        'Not authorised')
+            error "Invalid tenant token"
+            exit 1;;
+        'Not found')
+            info "$product_id is not found, creating one with the following languages: $all_languages"
+            update_languages "$all_languages"
+    esac
+
+    if [ $are_localisation_files_empty = true ]; then
+        auto_translations_response=$(curl -H "Accept: application/json" -H "Authorization: Bearer $tenant_token" -L "$api_url/products/$product_id/strings?manual=false" -s)
+
+        if [ -n "`echo \"$auto_translations_response\" | grep 'stringId'`" ]; then
+            info "Indexing auto translations"
+            response_json=`response_to_js_map "$auto_translations_response"`
+            fill_translations_map 'auto' "$response_json"
+        else
+            error "Failed to get all auto-translations at once. Server response: $auto_translations_response"
+        fi
+    fi
+
+    if [ "`echo \"$manual_translations_response\" | grep 'stringId'`" ]; then
+        info "Saving the downloaded manual translations to $new_translations_file"
+        (response_to_js_map "$manual_translations_response") > $new_translations_file
+    fi
+
+    if [ -f "$backup_langs_file" ]; then
+        if [ -n "`diff <(echo \"$all_languages\") $backup_langs_file`" ]; then
+            info "Updating $product_id languages, new set of languages is $all_languages"
+            update_languages "$all_languages"
+        fi
+    else
+        existing_langs=$(curl -H "Accept: application/json" -H "Authorization: Bearer $tenant_token" -L "$api_url/products/$product_id" -s | jq -r '.languages[]?')
+
+        if [[ -z "$existing_langs" ]] || [[ -n "`diff <(echo \"$all_languages\") <(echo \"$existing_langs\" | sort)`" ]]; then
+            info "Updating $product_id languages, new set of languages is $all_languages"
+            update_languages "$all_languages"
+        else
+            echo "$all_languages" > "$backup_langs_file"
+        fi
+    fi
+
+    info "Loading current and previous manual translations into memory from $prev_translations_file and $new_translations_file"
+    new_translations_data=`cat $new_translations_file`
+    prev_translations_data=`cat $prev_translations_file`
+
+    if [ "`calc_md5 \"$new_translations_data\"`" != "`calc_md5 \"$prev_translations_data\"`" ] || [ "$FORCE_REFRESH" = "true" ] ; then
+        info "Manual translations changed"
+        manual_translations_changed=true
+    else
+        info "Manual translations have not changed"
+        manual_translations_changed=false
+    fi
+
+    if [ $manual_translations_changed = true ] ; then
+        info "Indexing manual translations"
+        fill_translations_map 'manual' "$prev_translations_file" "$new_translations_file"
+    fi
+
+    base_file_lines=`echo "$base_file_content" | grep -v '^$' | wc -l`
+    base_file_str_ids=`echo "$base_file_content" | cut -d '=' -f 1`
+    new_languages=`echo "$all_languages" | sed -e "s/$base_language//"`
+
+    # split multiline string into array
+    OIFS="$IFS"
+    IFS='
+    '
+    IFS=${IFS:0:1}
+    langs=( $new_languages )
+    IFS="$OIFS"
+
+    for language in ${langs[@]}; do
+        file="$langs_path/$language.lproj/$file_to_translate"
+        if [[ ! -f "$file" ]]; then
+            continue;
+        fi
+
+        echo ''
+        info "Processing $file"
+        file_content=`get_strings_from_file $file`
+        file_lines=`echo "$file_content" | grep -v '^$' | wc -l`
+        new_strings=true
+        description=''
+        desired_max_length=''
+
+        if [ $file_lines -eq $base_file_lines ]; then
+            content_diff=`diff <(echo "$base_file_content") <(echo "$file_content")`
+
+            if [ -n "$content_diff" ]; then
+                content_diff_reverse=`echo "$file_content" | grep -F -x "$base_file_content"`
+
+                if [ -z "$content_diff_reverse" ]; then
+                    new_strings=false
+                fi
+            fi
+        else
+            info "$base_file_lines lines in base file, $file_lines lines in $file"
+
+            if [ $file_lines -gt $base_file_lines ]; then
+                duplicates=`find_duplicates "$file_content"`
+                is_content_changed=false
+
+                if [ -n "$duplicates" ]; then
+                    is_content_changed=true
+                    file_content=`echo "$file_content" | sort | uniq`
+                fi
+
+                deleted_strings=`echo "$file_content" | grep -v "polyglot:disable:this" | cut -d '=' -f 1 | grep -xv "$base_file_str_ids" | grep -xv "$disabled_base_file_str_ids"`
+
+                if [ -n "$deleted_strings" ]; then
+                    is_content_changed=true
+                    file_content=`echo "$file_content" | grep -vw "$deleted_strings"`
+                fi
+
+                if [ $is_content_changed = true ]; then
+                    echo "$file_content" > $file
+                fi
+            fi
+        fi
+
+        if [[ $manual_translations_changed = false ]] && [[ $new_strings = false ]] ; then
+            echo "File $file seems to be translated already"
+            continue;
+        fi
+
+        while read line; do
+            if [ "$line" = "" ]; then
+                continue;
+            elif [[ "$line" =~ $comment_regex ]]; then
+                if [ "`echo \"$line\" | grep 'polyglot:max_length'`" ]; then
+                    desired_max_length=`echo "$line" | cut -d ':' -f 3`
+
+                    if [[ ! "$desired_max_length" =~ $digit_regex ]]; then
+                        error "Invalid value for 'polyglot:max_length': \"$desired_max_length\""
+                        desired_max_length=''
+                    fi
+                else
+                    description+="\n$line"
+                fi
+                continue;
+            elif [[ ! "$line" =~ $line_regex ]]; then
+                continue;
+            fi
+
+            id=`echo $line | cut -d '=' -f 1`
+            id=`echo ${id//\"}`
+            base_value=`echo "$line" | cut -d '=' -f 2`
+            base_value=`echo "$base_value" | sed -e 's/;[ 	]*\/\/.*/;/' -e 's/\"//' -e 's/\";$/;/'`
+            base_value=`echo ${base_value//;}`
+            manual_translation=`get_translation 'manual' "$id" "$language"`
+            is_src_str_changed=false
+
+            if [ -n "$description" ]; then
+                description=`echo "$description" | sed -e 's/\\\n[ 	]*\/\/[ ]*/\\\n/g' -e 's/^\\\n//'`
+            fi
+
+            if [ -n "$manual_translation" ]; then
+                saved_base_value=`get_translation 'manual' "$id" "en"`
+                prev_description=`get_description "$id"`
+                prev_desired_max_len=`get_desired_max_len "$id"`
+
+                if [ "$saved_base_value" != "$base_value" ]; then
+                    restart_translation_info 'source string' "$id"
+                    manual_translation=''
+                    is_src_str_changed=true
+                elif [ "$prev_description" != "$description" ]; then
+                    restart_translation_info 'description' "$id"
+                    manual_translation=''
+                elif [ "$prev_desired_max_len" != "$desired_max_length" ]; then
+                    restart_translation_info 'max-length' "$id"
+                    manual_translation=''
+                fi
+            fi
+
+            old_record="\"$id\" = "
+            escaped_old_record=`escape_for_grep "$old_record"`
+            disabled_translation="`(echo $line ; grep \"$escaped_old_record\" $file) | grep "polyglot:disable:this"`"
+
+            if [ -n "$manual_translation" ]; then
+                if [ $descr_requirement = 'required' ] && [ -z "$description" ]; then
+                    error "\"$id\" has no description"
+                    exit 1
+                fi
+
+                translator_comment=`get_translator_comment "$id" "$language"`
+                manual_mark='corrected by a human'
+
+                if [ -n "$translator_comment" ]; then
+                    manual_mark="translator comment: \"$translator_comment\""
+                fi
+
+                new_record="\"$id\" = \"$manual_translation\"; // $manual_mark"
+                escaped_new_record=`escape_for_grep "$new_record"`
+                description=''
+                desired_max_length=''
+
+                if [ "`grep \"$escaped_new_record\" $file`" ]; then
+                    continue;
+                elif [ "`grep \"$escaped_old_record\" $file`" ]; then
+                    if [ -z "$disabled_translation" ]; then
+                        escaped_old_record=`escape_for_sed "$old_record"`
+                        escaped_new_record=`escape_for_sed "$new_record"`
+                        sed -i '' -e "s/$escaped_old_record.*/$escaped_new_record/" "$file" 2> /dev/null
+                    else
+                        info "Translation for string '$id' seems to be disabled for '$language' language so Polyglot will not override this value. If you want Polyglot to override it, remove 'polyglot:disable:this' from the file."
+                    fi
+                else
+                    echo "$new_record" >> $file
+                fi
+
+                continue;
+            fi
+
+            is_new_translation=true
+
+            if [ "`grep \"$escaped_old_record\" $file`" ]; then
+                if [ -z "`grep -Fx \"$line\" $file`" ] && [ $is_src_str_changed = false ]; then
+                    description=''
+                    desired_max_length=''
+                    continue;
+                else
+                    is_new_translation=false
+                fi
+            fi
+
+            auto_translation=`get_translation 'auto' "$id" "$language"`
+
+            if [ -z "$auto_translation" ]; then
+                localisation=''
+                error_message=''
+                api_response=''
+                i=0
+
+                if [ $descr_requirement != 'optional' ] && [ -z "$description" ]; then
+                    error "\"$id\" has no description"
+                    exit 1
+                fi
+
+                info "Getting auto-translations for \"$id\""
+
+                while [ $i -lt $translation_retries_number ] && [ -z "$localisation" ]; do
+                    sleep $i
+                    api_response="`translate_string \"$id\" \"$base_value\" \"$description\" \"$desired_max_length\"`"
+                    localisation=`response_to_js_map "[$api_response]"`
+
+                    if [ "`echo \"$api_response\" | grep \"$free_plan_exhausted_mark\"`" ]; then
+                        error "$api_response"
+                        exit $free_plan_exhausted_code
+                    fi
+
+                    if [ "`echo \"$api_response\" | grep \"$translation_error_mark\"`" ]; then
+                        error_message="$api_response"
+                        localisation=''
+                        info "Failed to get auto-translations. Retrying for \"$id\""
+                    fi
+
+                    (( i+= 1 ))
+                done
+
+                if [ -z "$localisation" ]; then
+                    error "Failed to get auto-translations. $error_message"
+                    exit $translation_error_code
+                fi
+
+                fill_translations_map 'auto' "$localisation"
+                description=''
+                desired_max_length=''
+                auto_translation=`get_translation 'auto' "$id" "$language"`
+
+                if [ -z "$auto_translation" ]; then
+                    error 'Failed to get auto-translations. Something went wrong, please try to restart Polyglot'
+                    error "Server response: $api_response"
+                    exit $translation_error_code
+                fi
+            fi
+
+            if [ $is_new_translation = true ]; then
+                echo "\"$id\" = \"$auto_translation\";" >> $file
+            else
+                escaped_old_record=`escape_for_sed "$old_record"`
+                new_line="\"$id\" = \"$auto_translation\";"
+
+                if [ "$base_value" = "$auto_translation" ]; then
+                    new_line="$new_line // translation is identical to the English string"
+                fi
+
+                new_value=`escape_for_sed "$new_line"`
+                sed -Ei '' -e "s/$escaped_old_record.*/$new_value/" "$file" 2> /dev/null
+            fi
+
+            description=''
+            desired_max_length=''
+        done < <(escape_line_breaks "$base_file_full_content")
+    done
+}
+
+for file in "${files_to_translate[@]}"
+do
+  main "$file"
+done
+
+mv "$new_translations_file" "$prev_translations_file"

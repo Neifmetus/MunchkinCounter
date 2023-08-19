@@ -1,0 +1,7 @@
+"player" = "Jugador";
+"restartGame" = "Reiniciar juego";
+"winMessage" = "Fin del juego.\nEl ganador es %@\nReiniciar juego";
+"changeName" = "Cambiar nombre";
+"cancel" = "Cancelar";
+"enterName" = "Ingresa el nombre del jugador";
+"roll" = "Tira dados";

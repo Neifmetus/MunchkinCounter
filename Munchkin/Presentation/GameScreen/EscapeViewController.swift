@@ -49,8 +49,17 @@ class EscapeViewController: UIViewController {
     
     @objc
     private func roll() {
-        let random = Int.random(in: 1...6)
-        diceView.image = UIImage(named: "dice\(random)")
+        let transitionOptions: UIView.AnimationOptions = [.transitionFlipFromRight, .showHideTransitionViews]
+
+        UIView.transition(with: diceView, duration: 1.0, options: transitionOptions, animations: {
+            self.diceView.isHidden = true
+        })
+
+        UIView.transition(with: diceView, duration: 1.0, options: transitionOptions, animations: {
+            self.diceView.isHidden = false
+            let random = Int.random(in: 1...6)
+            self.diceView.image = UIImage(named: "dice\(random)")
+        })
     }
 
 }
