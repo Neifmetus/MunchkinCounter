@@ -31,6 +31,13 @@ class ViewModel {
     
     weak var delegate: ViewModelDelegate?
     
+    var maxLevel = 10
+    
+    init() {
+        let level = UserDefaults.standard.integer(forKey: "maxLevel")
+        maxLevel = level == 0 ? 10 : level
+    }
+    
     func indexOf(id: Int) -> Int? {
         players.firstIndex(where: { $0.id == id })
     }
@@ -39,7 +46,7 @@ class ViewModel {
         for i in 0..<players.count {
             let player = players[i]
             if player.id == id {
-                if player.level == 9 {
+                if player.level == maxLevel - 1 {
                     finishGame(winner: id)
                 } else {
                     players[i].level += 1

@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         viewModel.delegate = self
-        navigationController?.navigationBar.isHidden = true
+        addSettingsButton()
         
         let width = UIScreen.main.bounds.width / 2
         layout.itemSize = CGSize(width: width, height: width)
@@ -86,6 +86,28 @@ class ViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(refreshButton.snp.top).offset(-16)
         }
+    }
+    
+    private func addSettingsButton() {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "gear"), for: .normal)
+        button.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
+        button.frame = CGRectMake(0, 0, 50, 50)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        let barButton = UIBarButtonItem(customView: button)
+        navigationItem.rightBarButtonItem = barButton
+    }
+    
+    @objc private func settingsTapped() {
+        let controller = SettingsViewController()
+        if let sheet = controller.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        present(controller, animated: true, completion: nil)
     }
     
     @objc private func showEscapeRollView() {
