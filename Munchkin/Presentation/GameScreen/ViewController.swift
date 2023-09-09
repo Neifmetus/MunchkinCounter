@@ -58,7 +58,19 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        setTitle()
         setConstraints()
+    }
+    
+    func showMyViewControllerInACustomizedSheet() {
+        let viewControllerToPresent = EscapeViewController()
+        if let sheet = viewControllerToPresent.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        present(viewControllerToPresent, animated: true, completion: nil)
     }
     
     private func setConstraints() {
@@ -92,7 +104,7 @@ class ViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "gear"), for: .normal)
         button.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
-        button.frame = CGRectMake(0, 0, 50, 50)
+        button.frame = CGRectMake(0, 0, 35, 35)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         let barButton = UIBarButtonItem(customView: button)
@@ -101,6 +113,7 @@ class ViewController: UIViewController {
     
     @objc private func settingsTapped() {
         let controller = SettingsViewController()
+        controller.delegate = self
         if let sheet = controller.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
@@ -114,15 +127,8 @@ class ViewController: UIViewController {
         showMyViewControllerInACustomizedSheet()
     }
     
-    func showMyViewControllerInACustomizedSheet() {
-        let viewControllerToPresent = EscapeViewController()
-        if let sheet = viewControllerToPresent.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.prefersEdgeAttachedInCompactHeight = true
-            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-        }
-        present(viewControllerToPresent, animated: true, completion: nil)
+    private func setTitle() {
+        title = "\(NSLocalizedString("maxLevel", comment: "")) \(viewModel.maxLevel)"
     }
 
 }
@@ -232,5 +238,11 @@ extension ViewController: ViewModelDelegate {
     func reloadGame() {
         viewModel.players = []
         collectionView.reloadData()
+    }
+}
+
+extension ViewController: SettingsViewDelegate {
+    func updateInfo() {
+        setTitle()
     }
 }

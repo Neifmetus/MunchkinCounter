@@ -31,11 +31,9 @@ class ViewModel {
     
     weak var delegate: ViewModelDelegate?
     
-    var maxLevel = 10
-    
-    init() {
+    var maxLevel: Int {
         let level = UserDefaults.standard.integer(forKey: "maxLevel")
-        maxLevel = level == 0 ? 10 : level
+        return level == 0 ? 10 : level
     }
     
     func indexOf(id: Int) -> Int? {

@@ -7,9 +7,14 @@
 
 import SnapKit
 
+protocol SettingsViewDelegate: AnyObject {
+    func updateInfo()
+}
+
 class SettingsViewController: UIViewController {
     
     var maxLevel = 10
+    weak var delegate: SettingsViewDelegate?
     
     private var titleLabel: UILabel = {
         let label = UILabel()
@@ -36,8 +41,15 @@ class SettingsViewController: UIViewController {
         let level = UserDefaults.standard.integer(forKey: "maxLevel")
         maxLevel = level == 0 ? 10 : level
         field.text = "\(maxLevel)"
-        field.delegate = self
         cofigureLayout()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let text = field.text, !text.isEmpty {
+            UserDefaults.standard.setValue(field.text, forKey: "maxLevel")
+            delegate?.updateInfo()
+        }
     }
     
     private func cofigureLayout() {
@@ -52,14 +64,6 @@ class SettingsViewController: UIViewController {
         field.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.trailing).offset(16)
             make.centerY.equalTo(titleLabel)
-        }
-    }
-}
-
-extension SettingsViewController: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text = textField.text, !text.isEmpty {
-            UserDefaults.standard.setValue(textField.text, forKey: "maxLevel")
         }
     }
 }
