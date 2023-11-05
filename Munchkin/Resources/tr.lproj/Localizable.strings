@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  Munchkin
+
+  Created by Екатерина Батеева on 30.04.2023.
+  
+*/
+
+"player" = "Oyuncu";
+"restartGame" = "Oyunu yeniden başlat";
+"winMessage" = "Oyun bitti.\nKazanan %@\nOyunu yeniden başlat";
+"changeName" = "İsmi değiştir";
+"cancel" = "İptal";
+"enterName" = "Oyuncunun adını girin";
+"roll" = "Zar at";
+"maxLevel" = "Maksimum seviye";
+"done" = "Tamam";

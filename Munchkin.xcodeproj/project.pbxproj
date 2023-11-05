@@ -66,6 +66,9 @@
 		91E322FF2A04F4EA0032E9F3 /* MunchkinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchkinTests.swift; sourceTree = "<group>"; };
 		91F55FE029FEA30400D7D505 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		91F55FE229FEA31600D7D505 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		91F5EF4E2AF6BB80006C89C2 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		91F5EF4F2AF6BBB8006C89C2 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		91F5EF502AF6BC1F006C89C2 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		91FBCA2A2A647DBD0040AC50 /* EscapeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapeViewController.swift; sourceTree = "<group>"; };
 		91FC1249279469CC00040686 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		91FC124E27946A0A00040686 /* NewPlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerCell.swift; sourceTree = "<group>"; };
@@ -309,6 +312,9 @@
 				es,
 				de,
 				fr,
+				it,
+				pl,
+				tr,
 			);
 			mainGroup = 9188181C276DD78500D33BA6;
 			productRefGroup = 91881826276DD78500D33BA6 /* Products */;
@@ -476,6 +482,9 @@
 				9178D0BA2A8BD50700052508 /* es */,
 				9178D0BB2A8BD63500052508 /* de */,
 				9178D0BC2A8BEB3B00052508 /* fr */,
+				91F5EF4E2AF6BB80006C89C2 /* it */,
+				91F5EF4F2AF6BBB8006C89C2 /* pl */,
+				91F5EF502AF6BC1F006C89C2 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -654,7 +663,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 9486727C5W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Munchkin/Info.plist;
@@ -665,7 +674,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -687,7 +696,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 9486727C5W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Munchkin/Info.plist;
@@ -698,7 +707,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = neifmetus.Munchkin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

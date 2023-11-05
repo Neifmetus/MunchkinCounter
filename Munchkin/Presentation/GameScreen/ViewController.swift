@@ -104,7 +104,8 @@ class ViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "gear"), for: .normal)
         button.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
-        button.frame = CGRectMake(0, 0, 35, 35)
+        button.tintColor = .mainLineColor
+        button.frame = CGRectMake(0, 0, 32, 32)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         let barButton = UIBarButtonItem(customView: button)

@@ -25,6 +25,12 @@ class EscapeViewController: UIViewController {
         button.addTarget(self, action: #selector(roll), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var actionButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(roll), for: .touchUpInside)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +50,11 @@ class EscapeViewController: UIViewController {
             make.bottom.equalTo(rollButton.snp.top).offset(-64)
             make.width.equalTo(diceView.snp.height)
             make.centerX.equalToSuperview()
+        }
+        
+        view.addSubview(actionButton)
+        actionButton.snp.makeConstraints { make in
+            make.edges.equalTo(diceView)
         }
     }
     
