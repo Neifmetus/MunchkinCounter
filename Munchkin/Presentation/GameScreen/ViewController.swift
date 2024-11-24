@@ -11,8 +11,15 @@ import SnapKit
 class ViewController: UIViewController {
     private let viewModel = ViewModel()
     
-    private lazy var collectionView = UICollectionView(frame: CGRect.zero,
-                                                       collectionViewLayout: UICollectionViewFlowLayout.init())
+    private lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: CGRect.zero,
+                           collectionViewLayout: UICollectionViewFlowLayout.init())
+        view.keyboardDismissMode = .onDrag
+        view.register(PlayerCell.self, forCellWithReuseIdentifier: "player_cell")
+        view.register(NewPlayerCell.self, forCellWithReuseIdentifier: "new_player_cell")
+        return view
+    }()
+    
     private lazy var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
     
     private lazy var refreshButton: UIButton = {
@@ -26,14 +33,22 @@ class ViewController: UIViewController {
         button.addTarget(self, action: #selector(reloadGame), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var escapeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "dices"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(showEscapeRollView), for: .touchUpInside)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .systemBackground
         viewModel.delegate = self
+        addSettingsButton()
         
-        let width = (UIScreen.main.bounds.width - 48) / 2
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        let width = UIScreen.main.bounds.width / 2
         layout.itemSize = CGSize(width: width, height: width)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
@@ -42,16 +57,23 @@ class ViewController: UIViewController {
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.keyboardDismissMode = .onDrag
-        collectionView.register(PlayerCell.self, forCellWithReuseIdentifier: "player_cell")
-        collectionView.register(NewPlayerCell.self, forCellWithReuseIdentifier: "new_player_cell")
-                
-        view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
+        setTitle()
+        setConstraints()
+    }
+    
+    func showMyViewControllerInACustomizedSheet() {
+        let viewControllerToPresent = EscapeViewController()
+        if let sheet = viewControllerToPresent.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        present(viewControllerToPresent, animated: true, completion: nil)
+    }
+    
+    private func setConstraints() {
         let margins = view.layoutMarginsGuide
         view.addSubview(refreshButton)
         refreshButton.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +83,55 @@ class ViewController: UIViewController {
             refreshButton.heightAnchor.constraint(equalToConstant: 50),
             refreshButton.widthAnchor.constraint(equalToConstant: 200)
         ])
+        
+        view.addSubview(escapeButton)
+        escapeButton.snp.makeConstraints { make in
+            make.centerY.equalTo(refreshButton)
+            make.leading.equalToSuperview().offset(16)
+            make.size.equalTo(50)
+        }
+        
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(refreshButton.snp.top).offset(-16)
+        }
     }
+    
+    private func addSettingsButton() {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "gear"), for: .normal)
+        button.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
+        button.tintColor = .mainLineColor
+        button.frame = CGRectMake(0, 0, 32, 32)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        let barButton = UIBarButtonItem(customView: button)
+        navigationItem.rightBarButtonItem = barButton
+    }
+    
+    @objc private func settingsTapped() {
+        let controller = SettingsViewController()
+        controller.delegate = self
+        if let sheet = controller.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        present(controller, animated: true, completion: nil)
+    }
+    
+    @objc private func showEscapeRollView() {
+        showMyViewControllerInACustomizedSheet()
+    }
+    
+    private func setTitle() {
+        title = "\(NSLocalizedString("maxLevel", comment: "")) \(viewModel.maxLevel)"
+    }
+
 }
 
 extension ViewController: UICollectionViewDelegate {
@@ -169,5 +239,11 @@ extension ViewController: ViewModelDelegate {
     func reloadGame() {
         viewModel.players = []
         collectionView.reloadData()
+    }
+}
+
+extension ViewController: SettingsViewDelegate {
+    func updateInfo() {
+        setTitle()
     }
 }

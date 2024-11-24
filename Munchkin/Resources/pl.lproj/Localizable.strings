@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  Munchkin
+
+  Created by Екатерина Батеева on 30.04.2023.
+  
+*/
+
+"player" = "Gracz";
+"restartGame" = "Uruchom grę";
+"winMessage" = "Koniec gry.\nZwycięzcą jest %@\nZrestartuj grę.";
+"changeName" = "Zmień nazwę";
+"cancel" = "Anuluj";
+"enterName" = "Wprowadź nazwę gracza";
+"roll" = "Rzuć kostką";
+"maxLevel" = "Poziom maksymalny";
+"done" = "Gotowe";

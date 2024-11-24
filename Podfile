@@ -6,5 +6,6 @@ target 'Munchkin' do
   use_frameworks!
 
   pod 'SnapKit', '~> 5.0.0'
+  pod 'PolyglotRocks'
 
 end

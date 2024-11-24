@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  Munchkin
+
+  Created by Екатерина Батеева on 30.04.2023.
+  
+*/
+"player" = "Giocatore";
+"restartGame" = "Riavvia gioco";
+"winMessage" = "Fine del gioco.\nIl vincitore è %@\nRiavvia il gioco.";
+"changeName" = "Cambia nome";
+"cancel" = "Annulla";
+"enterName" = "Inserisci il nome del giocatore";
+"roll" = "Lancia dadi";
+"maxLevel" = "Livello massimo";
+"done" = "Fatto";
